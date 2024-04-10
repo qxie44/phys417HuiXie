@@ -7849,6 +7849,7 @@ a.anchor-link {
 <span class="c1"># Validation accuracy should be evaluated every 'Epoch' (1 epoch -&gt; full training dataset)</span>
 <span class="c1"># If using batch gradient, 1 iteration = 1 epoch</span>
 
+<span class="c1">#creating empty lists for value input</span>
 <span class="n">train_loss_list</span> <span class="o">=</span> <span class="p">[]</span>
 <span class="n">validation_accuracy_list</span> <span class="o">=</span> <span class="p">[]</span>
 </pre></div>
@@ -7901,7 +7902,8 @@ a.anchor-link {
 <div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="c1"># Training Loop ---------------------------------------------------------------------------------------</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="c1">#Go through each epoch and calculates loss and accuracy </span>
+<span class="c1"># Training Loop ---------------------------------------------------------------------------------------</span>
 <span class="k">for</span> <span class="n">epoch</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="o">.</span><span class="n">trange</span><span class="p">(</span><span class="n">epochs</span><span class="p">):</span>
     
     <span class="n">optimizer</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>
@@ -7913,7 +7915,7 @@ a.anchor-link {
     <span class="n">optimizer</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
     
     <span class="c1"># Compute Validation Accuracy ----------------------------------------------------------------------</span>
-    <span class="c1">#validation accuracy</span>
+    <span class="c1">#iterat through epoch validation accuracy </span>
     <span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
         <span class="n">outputs</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">X_trainV</span><span class="p">)</span>
         <span class="n">predicted_labels</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">outputs</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
@@ -8078,7 +8080,7 @@ epoch 34, loss 1.5129543542861938, accuracy 0.86
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="c1"># Compute the testing accuracy </span>
-
+<span class="c1"># computes accuracy using test features and targets</span>
 <span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
     <span class="n">outputs</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">mnist_test_features</span><span class="p">)</span>
     <span class="n">predicted_labels</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">outputs</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
@@ -8113,10 +8115,12 @@ epoch 34, loss 1.5129543542861938, accuracy 0.86
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="c1"># Plot 5 incorrectly classified testing samples and print the model predictions for each of them</span>
 <span class="c1"># You can use np.reshape() to convert flattened 1D array back to 2D array</span>
+<span class="c1">#Sets up the empty list for incorrect and counts the index </span>
 <span class="n">incorrect</span> <span class="o">=</span> <span class="p">[]</span>
 <span class="n">index</span> <span class="o">=</span> <span class="mi">1</span>
 <span class="n">correct</span> <span class="o">=</span> <span class="mi">1</span>
-<span class="c1"># Iterate through the testing samples</span>
+
+<span class="c1"># Iterate through the testing samples until there are 5 inccorect ones</span>
 <span class="k">while</span> <span class="n">index</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">mnist_test_targets</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">incorrect</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">5</span><span class="p">:</span>
     <span class="n">target</span> <span class="o">=</span> <span class="n">mnist_test_targets</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
     <span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
